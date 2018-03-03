@@ -23,7 +23,7 @@
     <section id="map-container">
       <div id="map"></div>
     </section>
-    <section id="restaurants-container">
+    <section id="filter-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
@@ -33,6 +33,8 @@
           <option value="all">All Cuisines</option>
         </select>
       </div>
+    </section>
+    <section id="restaurants-container">
       <ul id="restaurants-list"></ul>
     </section>
   </main>
@@ -41,7 +43,8 @@
     Copyright (c) 2017
     <a href="/">
       <strong>Restaurant Reviews</strong>
-    </a> All Rights Reserved.
+    </a>
+    All Rights Reserved.
   </footer>
 
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
