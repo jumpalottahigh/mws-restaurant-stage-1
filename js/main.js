@@ -215,3 +215,18 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 window.addEventListener('load', () => {
   document.querySelector('iframe').setAttribute('title', 'map of restaurants');
 });
+
+/**
+ * Register Service Worker.
+ */
+(function registerServiceWorker() {
+  if (!navigator.serviceWorker) return;
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(() => {
+      console.log('SW registered!');
+    })
+    .catch(() => {
+      console.log('Registration failed!');
+    });
+})();
