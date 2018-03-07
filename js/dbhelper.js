@@ -7,11 +7,10 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    // const port = 4444; // Change this to your server port
-    // return `http://localhost:${port}/data/restaurants.json`;
-
+    const port = 5500; // Change this to your server port
+    return `http://localhost:${port}/data/restaurants.json`;
     // PRODUCTION
-    return 'https://jumpalottahigh.github.io/mws-restaurant-stage-1/data/restaurants.json';
+    // return 'https://jumpalottahigh.github.io/mws-restaurant-stage-1/data/restaurants.json';
   }
 
   /**

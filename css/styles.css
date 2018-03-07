@@ -74,8 +74,8 @@ section {
 }
 
 #footer {
-  background-color: #444;
-  color: #aaa;
+  background-color: #252831;
+  color: #fff;
   font-size: 0.7rem;
   letter-spacing: 1px;
   padding: 25px;
@@ -129,7 +129,7 @@ nav h1 a {
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-  color: tomato;
+  color: #991500;
   text-decoration: none;
 }
 
@@ -207,13 +207,15 @@ nav h1 a {
 }
 
 #restaurants-list li h2 {
-  color: #f18200;
+  color: tomato;
+  background-color: #252831;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif;
   font-size: 1.1rem;
-  font-weight: 200;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1.3;
   margin: 20px 0 10px;
+  padding: 2px 4px;
   text-transform: uppercase;
 }
 
@@ -224,7 +226,7 @@ nav h1 a {
 
 #restaurants-list li a {
   background-color: tomato;
-  color: #fff;
+  color: #000;
   display: inline-block;
   font-size: 14px;
   margin: 15px 0 0;
@@ -261,7 +263,7 @@ nav h1 a {
 }
 
 #restaurant-name {
-  color: #f18200;
+  color: #252831;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif;
   font-size: 24px;
   font-weight: 200;
@@ -312,7 +314,7 @@ nav h1 a {
 }
 
 #reviews-container h2 {
-  color: tomato;
+  color: #252831;
   font-size: 28px;
   font-weight: 300;
   letter-spacing: -1px;
@@ -425,7 +427,7 @@ nav h1 a {
   }
 
   #restaurants-list li h2 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   #restaurants-list li a {
@@ -451,6 +453,14 @@ nav h1 a {
 
   .inside #reviews-list {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .inside #restaurant-container {
+    padding: 124px 0 0 0;
+  }
+
+  .inside .restaurant-img {
+    max-width: 600px;
   }
 }
 
