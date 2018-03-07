@@ -81,6 +81,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
+  image.alt = restaurant.name;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   picture.appendChild(source620Webp);
@@ -191,3 +192,10 @@ getParameterByName = (name, url) => {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+/**
+ * Add title attribute to the map iframe.
+ */
+window.addEventListener('load', () => {
+  document.querySelector('iframe').setAttribute('title', 'map of restaurants');
+});
