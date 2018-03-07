@@ -143,11 +143,37 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = restaurant => {
   const li = document.createElement('li');
 
+  // Create picture tag to wrap responsive image sources
+  const picture = document.createElement('picture');
+
+  // Responsive Webp for Chrome
+  const source700Webp = document.createElement('source');
+  source700Webp.media = '(min-width: 700px) and (max-width: 1380px)';
+  source700Webp.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+    .split('.jpg')
+    .join('_400.webp');
+
+  const sourceWebp = document.createElement('source');
+  sourceWebp.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+    .split('.jpg')
+    .join('.webp');
+
+  // Responsive JPG
+  const source700 = document.createElement('source');
+  source700.media = '(min-width: 700px) and (max-width: 1380px)';
+  source700.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+    .split('.jpg')
+    .join('_400.jpg');
+
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = restaurant.name;
-  li.append(image);
+  picture.append(source700Webp);
+  picture.append(source700);
+  picture.append(sourceWebp);
+  picture.append(image);
+  li.append(picture);
 
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
