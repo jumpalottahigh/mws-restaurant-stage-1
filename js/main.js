@@ -213,7 +213,9 @@ addMarkersToMap = (restaurants = self.restaurants) => {
  * Add title attribute to the map iframe.
  */
 window.addEventListener('load', () => {
-  document.querySelector('iframe').setAttribute('title', 'map of restaurants');
+  const iframe = document.querySelector('iframe');
+  if (!iframe) return;
+  iframe.setAttribute('title', 'map of restaurants');
 });
 
 /**
