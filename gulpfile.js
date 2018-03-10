@@ -55,7 +55,7 @@ gulp.task('sw', function() {
 
 // Manifest
 gulp.task('manifest', function() {
-  return gulp.src(['./manifest.json']).pipe(gulp.dest('build/'));
+  return gulp.src(['./manifest.webmanifest']).pipe(gulp.dest('build/'));
 });
 
 // Deploy to gh-pages
