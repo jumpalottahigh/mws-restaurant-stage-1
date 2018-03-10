@@ -1,8 +1,10 @@
 const gulp = require('gulp')
 const deploy = require('gulp-gh-pages')
+const browserSync = require('browser-sync');
+const clean = require('gulp-clean');
 
 // Prep HTML to build
-gulp.task('copyHTML', function() {
+gulp.task('html', function() {
   return gulp
     .src([
       'index.html',
@@ -12,7 +14,7 @@ gulp.task('copyHTML', function() {
 })
 
 // Prep JS to build
-gulp.task('copyJS', function() {
+gulp.task('js', function() {
   return gulp
     .src([
       'js/**/*'
@@ -21,7 +23,7 @@ gulp.task('copyJS', function() {
 })
 
 // Prep CSS to build
-gulp.task('copyCSS', function() {
+gulp.task('css', function() {
   return gulp
     .src([
       'css/**/*'
@@ -30,7 +32,7 @@ gulp.task('copyCSS', function() {
 })
 
 // Prep data to build
-gulp.task('copyData', function() {
+gulp.task('data', function() {
   return gulp
     .src([
       'data/**/*'
@@ -39,7 +41,7 @@ gulp.task('copyData', function() {
 })
 
 // Prep images to build
-gulp.task('copyImg', function() {
+gulp.task('images', function() {
   return gulp
     .src([
       'img/**/*'
@@ -47,9 +49,61 @@ gulp.task('copyImg', function() {
     .pipe(gulp.dest('build/img/'))
 })
 
-gulp.task('deploy', ['copyHTML', 'copyJS', 'copyCSS', 'copyData', 'copyImg'], function() {
+gulp.task('favicon', function() {
+  return gulp
+    .src([
+      './favicon.ico'
+    ])
+    .pipe(gulp.dest('build/'))
+})
+
+// PWA assets: SW
+gulp.task('sw', function() {
+  return gulp
+    .src([
+      './sw.js'
+    ])
+    .pipe(gulp.dest('build/'))
+})
+
+// Manifest
+gulp.task('manifest', function() {
+  return gulp
+    .src([
+      './manifest.json'
+    ])
+    .pipe(gulp.dest('build/'))
+})
+
+// Deploy to gh-pages
+gulp.task('deploy', ['build'], function() {
   return gulp.src(['./build/**/*']).pipe(deploy())
 })
 
+// Clean build directory
+gulp.task('clean', function() {
+  return gulp.src('build/', {read: false})
+    .pipe(clean());
+});
+
+// Build
+gulp.task('build', ['clean', 'html', 'js', 'css', 'data', 'images', 'sw', 'manifest', 'favicon'])
+
+// Serve
+gulp.task('serve', ['build'], function() {
+  browserSync.init({
+    server: {
+      baseDir: 'build/'
+    }, ui: {
+      port: 5500
+    }, port: 5500
+  });
+});
+
+// TODO: make Gulp live reload on file changes
+// gulp.task('watch', ['serve'], function() {
+//   gulp.watch('**/*.html', {cwd: './'}, ['build']);
+// });
+
 // Explicitly specify default task
-gulp.task('default', ['copyHTML', 'copyJS', 'copyCSS', 'copyData', 'copyImg'])
+gulp.task('default', ['serve'])

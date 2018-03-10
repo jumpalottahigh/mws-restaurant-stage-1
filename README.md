@@ -11,18 +11,11 @@ If you want to run it locally clone the repo and install the dependencies:
 `$ cd mws-restaurant-stage-1`
 `$ npm install`
 
-To build the project:
+To build and run the project:
 
-`$ npm run build`
+`$ npm start`
 
-Then use your favorite server to serve the `./build` directory.
-Or alternatively run:
-
-`$ npm run serve`
-
-To run in dev mode:
-
-`$ npm run dev`
+Production assets are located in the `build/` directory.
 
 Current PWA state:
 
