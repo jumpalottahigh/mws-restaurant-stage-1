@@ -1,22 +1,21 @@
-const currentCacheVersion = 'mws-restaurant-v4';
+const currentCacheVersion = 'mws-restaurant-v12';
+const resourcesToCache = [
+  '/',
+  '/index.html',
+  '/restaurant.html',
+  '/css/styles.css',
+  '/js/dbhelper.js',
+  '/js/main.js',
+  '/js/restaurant_info.js',
+  '/data/restaurants.json'
+  // 'https://normalize-css.googlecode.com/svn/trunk/normalize.css',
+  // 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD_S9Z-6zktuRp_GiEL2iTXUAKf_q-p7UY&libraries=places&callback=initMap',
+];
 
 // Install SW
 self.addEventListener('install', event => {
-  // TODO: add images to this lists
-  const resourcesToCache = [
-    '/',
-    '/index.html',
-    'restaurant.html',
-    'css/styles.css',
-    'https://normalize-css.googlecode.com/svn/trunk/normalize.css',
-    'js/dbhelper.js',
-    'js/main.js',
-    'js/restaurant_info.js',
-    'https://maps.googleapis.com/maps/api/js?key=AIzaSyD_S9Z-6zktuRp_GiEL2iTXUAKf_q-p7UY&libraries=places&callback=initMap',
-    'data/restaurants.json'
-  ];
-
   // Cache the resources
+  // instead of aggressively caching all images, since we have 6 variations of each image, I'd only cache them as they come as requests in the SW's fetch event
   event.waitUntil(
     caches.open(currentCacheVersion).then(cache => {
       return cache.addAll(resourcesToCache);
@@ -25,18 +24,19 @@ self.addEventListener('install', event => {
 });
 
 // SW activate
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(cacheNames => {
+      // Delete all other versions of the 'mws-restaurant' cache except for the current one
       return Promise.all(
         cacheNames
-          .filter(function(cacheName) {
+          .filter(cacheName => {
             return (
               cacheName.startsWith('mws-restaurant') &&
-              cacheName != currentCacheVersion
+              currentCacheVersion != cacheName
             );
           })
-          .map(function(cacheName) {
+          .map(cacheName => {
             return caches.delete(cacheName);
           })
       );
@@ -49,16 +49,15 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.open(currentCacheVersion).then(cache => {
       return cache.match(event.request).then(response => {
-        // Return response from cache if one exists, otherwise go to network
-        return (
-          response ||
-          fetch(event.request, { mode: 'no-cors' }).then(response => {
-            cache.put(event.request, response.close());
-            return response;
-          })
-        );
-        // if (response) return response
-        // return fetch(event.request)
+        // Return response from cache if one exists
+        if (response) return response;
+
+        // Otherwise hit the network
+        return fetch(event.request, { mode: 'no-cors' }).then(netResponse => {
+          console.log(netResponse);
+          cache.put(event.request.url, netResponse.clone());
+          return netResponse;
+        });
       });
     })
   );
