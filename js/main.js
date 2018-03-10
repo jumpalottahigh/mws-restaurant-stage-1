@@ -6,9 +6,25 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', event => {
+  registerServiceWorker();
   fetchNeighborhoods();
   fetchCuisines();
 });
+
+/**
+ * Register Service Worker.
+ */
+registerServiceWorker = () => {
+  if (!navigator.serviceWorker) return;
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(() => {
+      console.log('SW registered!');
+    })
+    .catch(() => {
+      console.log('Registration failed!');
+    });
+};
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -213,5 +229,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
  * Add title attribute to the map iframe.
  */
 window.addEventListener('load', () => {
-  document.querySelector('iframe').setAttribute('title', 'map of restaurants');
+  const iframe = document.querySelector('iframe');
+  if (!iframe) return;
+  iframe.setAttribute('title', 'map of restaurants');
 });
