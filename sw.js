@@ -1,4 +1,4 @@
-const currentCacheVersion = 'mws-restaurant-v12';
+const currentCacheVersion = 'mws-restaurant-v14';
 const resourcesToCache = [
   '/',
   '/index.html',

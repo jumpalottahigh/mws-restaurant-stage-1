@@ -8,7 +8,9 @@ A fresh preview of the app is available at: [https://ecstatic-ptolemy-c60052.net
 If you want to run it locally clone the repo and install the dependencies:
 
 `$ git clone https://github.com/jumpalottahigh/mws-restaurant-stage-1`
+
 `$ cd mws-restaurant-stage-1`
+
 `$ npm install`
 
 To build and run the project:

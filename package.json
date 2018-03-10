@@ -1,15 +1,23 @@
 {
   "name": "mws-restaurant-stage-1",
   "version": "1.0.0",
-  "description": "---\r #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "description":
+    "---\r #### _Three Stage Course Material Project - Restaurant Reviews_",
   "main": "gulpfile.js",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.23.6",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-clean": "^0.4.0",
-    "gulp-gh-pages": "^0.5.4"
+    "gulp-clean-css": "^3.9.3",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^3.0.0"
   },
   "scripts": {
+    "prestart": "rm -rf ./build",
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gulp deploy"
