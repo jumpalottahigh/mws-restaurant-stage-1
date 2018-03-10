@@ -1,5 +1,37 @@
 # Mobile Web Specialist Certification Course
 ---
+
+This repo aims to satisfy the criteria for the stage one project of the Udacity Mobile Web Specialist course.
+
+A fresh preview of the app is available at: [https://ecstatic-ptolemy-c60052.netlify.com/](https://ecstatic-ptolemy-c60052.netlify.com/)
+
+If you want to run it locally clone the repo and install the dependencies:
+
+`$ git clone https://github.com/jumpalottahigh/mws-restaurant-stage-1`
+`$ cd mws-restaurant-stage-1`
+`$ npm install`
+
+To build the project:
+
+`$ npm run build`
+
+Then use your favorite server to serve the `./build` directory.
+Or alternatively run:
+
+`$ npm run serve`
+
+To run in dev mode:
+
+`$ npm run dev`
+
+Current PWA state:
+
+![current pwa state](current-pwa-state.png)
+
+---
+
+## Original Repo Notes Below
+
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
 ## Project Overview: Stage 1
