@@ -106,6 +106,10 @@ nav h1 a {
   text-transform: uppercase;
 }
 
+nav.breadcrumb {
+  height: auto;
+}
+
 #breadcrumb {
   display: flex;
   padding: 10px 0;
@@ -318,7 +322,7 @@ nav h1 a {
   padding: 10px 20px;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #252831;
   font-size: 28px;
   font-weight: 300;

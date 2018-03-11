@@ -127,7 +127,7 @@ fillRestaurantHoursHTML = (
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -177,6 +177,7 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
+  li.setAttribute('aria-current', 'page');
   breadcrumb.appendChild(li);
 };
 
@@ -197,5 +198,14 @@ getParameterByName = (name, url) => {
  * Add title attribute to the map iframe.
  */
 window.addEventListener('load', () => {
-  document.querySelector('iframe').setAttribute('title', 'map of restaurants');
+  // Update A11y attributes
+  document
+    .querySelector('iframe')
+    .setAttribute('title', 'Map of restaurants in New York');
+  document
+    .querySelector('#map')
+    .setAttribute(
+      'aria-label',
+      `Map with restaurant ${self.restaurant.name}'s location in New York city`
+    );
 });

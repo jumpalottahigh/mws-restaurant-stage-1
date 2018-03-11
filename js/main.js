@@ -184,7 +184,7 @@ createRestaurantHTML = restaurant => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = restaurant.name;
+  image.alt = `Photo of restaurant ${restaurant.name}`;
   picture.append(source700Webp);
   picture.append(source700);
   picture.append(sourceWebp);
