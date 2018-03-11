@@ -198,6 +198,11 @@ nav h1 a {
   padding: 20px;
 }
 
+/* Make restaurant button links always fixed to bottom of card */
+#restaurants-list li a {
+  margin-top: auto !important;
+}
+
 #restaurants-list .restaurant-img {
   background-color: #ccc;
   display: block;
@@ -467,5 +472,10 @@ nav h1 a {
 @media screen and (min-width: 1380px) {
   .inside #reviews-list {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  #restaurants-list li {
+    max-width: 425px;
+    justify-self: center;
   }
 }
