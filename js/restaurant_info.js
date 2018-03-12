@@ -81,7 +81,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.alt = restaurant.name;
+  image.alt = `Restaurant ${restaurant.name}`;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
   picture.appendChild(source620Webp);
