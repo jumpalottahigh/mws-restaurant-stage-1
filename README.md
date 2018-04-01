@@ -2,7 +2,7 @@
 
 ---
 
-This repo aims to satisfy the criteria for the stage one project of the Udacity Mobile Web Specialist course.
+This repo aims to satisfy the criteria for solutions for stage one, two and three of the Udacity Mobile Web Specialist course project.
 
 A fresh preview of the app is available at: [https://ecstatic-ptolemy-c60052.netlify.com/](https://ecstatic-ptolemy-c60052.netlify.com/)
 
@@ -19,6 +19,8 @@ To build and run the project:
 `$ npm start`
 
 Production assets are located in the `build/` directory.
+
+> You have to be running the API server on port `1337` from this repo: [https://github.com/udacity/mws-restaurant-stage-2](https://github.com/udacity/mws-restaurant-stage-2)
 
 Current PWA state:
 

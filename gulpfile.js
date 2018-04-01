@@ -23,6 +23,11 @@ gulp.task('js', function() {
       // )
       // .pipe(uglify())
       .pipe(gulp.dest('build/js/'))
+      .pipe(
+        browserSync.reload({
+          stream: true
+        })
+      )
   );
 });
 
@@ -32,11 +37,6 @@ gulp.task('css', function() {
     .src(['css/**/*'])
     .pipe(cleanCSS())
     .pipe(gulp.dest('build/css/'));
-});
-
-// Prep data to build
-gulp.task('data', function() {
-  return gulp.src(['data/**/*']).pipe(gulp.dest('build/data/'));
 });
 
 // Prep images to build
@@ -74,7 +74,6 @@ gulp.task('build', [
   'html',
   'js',
   'css',
-  'data',
   'images',
   'sw',
   'manifest',
@@ -94,10 +93,10 @@ gulp.task('serve', ['build'], function() {
   });
 });
 
-// TODO: make Gulp live reload on file changes
-// gulp.task('watch', ['serve'], function() {
-//   gulp.watch('**/*.html', {cwd: './'}, ['build']);
-// });
+gulp.task('dev', ['serve'], function() {
+  gulp.watch('js/**/*.js', ['js']);
+  gulp.watch(['index.html', 'restaurant.html'], ['html']);
+});
 
 // Explicitly specify default task
-gulp.task('default', ['serve']);
+gulp.task('default', ['dev']);
