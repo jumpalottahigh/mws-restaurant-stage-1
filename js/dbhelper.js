@@ -11,6 +11,18 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+  static dbPromise() {
+    // If we don't have SW support we have little use for the IDB
+    if (!navigator.serviceWorker) return;
+
+    return idb.open('restaurantReviewsApp', 1, upgradeDb => {
+      const store = upgradeDb.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+      store.createIndex('by-date', 'createdAt');
+    });
+  }
+
   /**
    * Fetch all restaurants.
    */
@@ -21,6 +33,21 @@ class DBHelper {
       if (xhr.status === 200) {
         // Got a success response from server!
         const restaurants = JSON.parse(xhr.responseText);
+
+        // TODO: This will probably get factored out. Currently just trying to write restaurant data to IDB
+        // Update IDB store
+        DBHelper.dbPromise().then(db => {
+          if (!db) return;
+
+          const tx = db.transaction('restaurants', 'readwrite');
+          const store = tx.objectStore('restaurants');
+
+          restaurants.forEach(message => {
+            store.put(message);
+          });
+          console.log(db);
+        });
+
         callback(null, restaurants);
       } else {
         // Oops!. Got an error from server.
