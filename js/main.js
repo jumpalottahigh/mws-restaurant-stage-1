@@ -8,7 +8,19 @@ var markers = [];
 document.addEventListener('DOMContentLoaded', event => {
   fetchNeighborhoods();
   fetchCuisines();
+  registerServiceWorker();
 });
+
+/**
+ * Register ServiceWorker.
+ */
+registerServiceWorker = () => {
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker
+      .register('sw.js')
+      .then(() => console.log('SW is registered!'));
+  }
+};
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -217,12 +229,3 @@ window.addEventListener('load', () => {
   if (!iframe) return;
   iframe.setAttribute('title', 'map of restaurants');
 });
-
-/**
- * Register ServiceWorker.
- */
-if (navigator.serviceWorker) {
-  navigator.serviceWorker
-    .register('sw.js')
-    .then(() => console.log('SW is registered!'));
-}

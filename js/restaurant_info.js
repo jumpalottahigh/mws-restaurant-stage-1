@@ -17,6 +17,16 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+
+      // Ally improvements for the map container and the iframe itself
+      document
+        .querySelector('#map')
+        .setAttribute(
+          'aria-label',
+          `Map with restaurant ${
+            self.restaurant.name
+          }'s location in New York city`
+        );
     }
   });
 };
@@ -198,14 +208,17 @@ getParameterByName = (name, url) => {
  * Add title attribute to the map iframe.
  */
 window.addEventListener('load', () => {
-  // Update A11y attributes
-  document
-    .querySelector('iframe')
-    .setAttribute('title', 'Map of restaurants in New York');
-  document
-    .querySelector('#map')
-    .setAttribute(
-      'aria-label',
-      `Map with restaurant ${self.restaurant.name}'s location in New York city`
-    );
+  // Update map's iframe title attribute for a11y once it has loaded
+  setTimeout(() => {
+    document
+      .querySelector('iframe')
+      .setAttribute('title', 'Map of restaurants in New York');
+  }, 2000);
+
+  // Register ServiceWorker.
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker
+      .register('sw.js')
+      .then(() => console.log('SW is registered!'));
+  }
 });

@@ -483,3 +483,14 @@ nav.breadcrumb {
     justify-self: center;
   }
 }
+
+@media screen and (min-width: 1450px) {
+  #restaurants-list {
+    grid-gap: 30px;
+  }
+
+  #restaurants-list li {
+    max-width: 550px;
+    justify-self: center;
+  }
+}
