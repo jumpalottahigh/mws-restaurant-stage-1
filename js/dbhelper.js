@@ -19,7 +19,8 @@ class DBHelper {
       const store = upgradeDb.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      store.createIndex('by-date', 'createdAt');
+      // Don't need this index for now
+      // store.createIndex('by-date', 'createdAt');
     });
   }
 
@@ -27,35 +28,48 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        // Got a success response from server!
-        const restaurants = JSON.parse(xhr.responseText);
+    // Check if we already have items stored in IDB.
+    DBHelper.dbPromise().then(db => {
+      const index = db.transaction('restaurants').objectStore('restaurants');
+      index.getAll().then(restaurantsFromIDB => {
+        if (restaurantsFromIDB.length) {
+          // Return items from the store if we have those.
+          console.log(`Items from IDB: ${restaurantsFromIDB}`);
+          callback(null, restaurantsFromIDB);
+        } else {
+          // Otherwise go to the network.
+          console.log('Nothing in IDB store yet. Hitting the network...');
+          // Make an API request and parse the data as JSON
+          const APIrequest = fetch(DBHelper.DATABASE_URL)
+            .then(response => response.json())
+            .catch(error => {
+              throw new Error(`Could not fetch restaurants: ${error.status}`);
+            });
 
-        // TODO: This will probably get factored out. Currently just trying to write restaurant data to IDB
-        // Update IDB store
-        DBHelper.dbPromise().then(db => {
-          if (!db) return;
+          APIrequest.then(restaurants => {
+            // Write items to IDB for next visit
+            DBHelper.dbPromise().then(db => {
+              if (!db) return;
 
-          const tx = db.transaction('restaurants', 'readwrite');
-          const store = tx.objectStore('restaurants');
+              const tx = db.transaction('restaurants', 'readwrite');
+              const store = tx.objectStore('restaurants');
 
-          restaurants.forEach(message => {
-            store.put(message);
+              restaurants.forEach(message => {
+                store.put(message);
+              });
+            });
+
+            // Return the restaurant data
+            callback(null, restaurants);
+          }).catch(error => {
+            throw new Error(
+              `Something's wrong with the API response: ${error}`
+            );
+            callback(error, null);
           });
-          console.log(db);
-        });
-
-        callback(null, restaurants);
-      } else {
-        // Oops!. Got an error from server.
-        const error = `Request failed. Returned status of ${xhr.status}`;
-        callback(error, null);
-      }
-    };
-    xhr.send();
+        }
+      });
+    });
   }
 
   /**
