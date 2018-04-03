@@ -11,6 +11,9 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+  /**
+   * Get IDB promise.
+   */
   static dbPromise() {
     // If we don't have SW support we have little use for the IDB
     if (!navigator.serviceWorker) return;
@@ -19,56 +22,60 @@ class DBHelper {
       const store = upgradeDb.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      // Don't need this index for now
-      // store.createIndex('by-date', 'createdAt');
+    });
+  }
+
+  /**
+   * Get data from IDB.
+   */
+  static getDataFromIDB() {
+    return DBHelper.dbPromise().then(db => {
+      const index = db.transaction('restaurants').objectStore('restaurants');
+      return index.getAll();
+    });
+  }
+
+  /**
+   * Get data from API.
+   */
+  static getDataFromAPI() {
+    const APIrequest = fetch(DBHelper.DATABASE_URL)
+      .then(response => response.json())
+      .catch(error => {
+        throw new Error(`Could not fetch restaurants: ${error.status}`);
+      });
+
+    return APIrequest.then(restaurants => {
+      // Write items to IDB for next visit
+      DBHelper.dbPromise().then(db => {
+        if (!db) return;
+
+        const tx = db.transaction('restaurants', 'readwrite');
+        const store = tx.objectStore('restaurants');
+
+        restaurants.forEach(message => {
+          store.put(message);
+        });
+      });
+      return restaurants;
     });
   }
 
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
-    // Check if we already have items stored in IDB.
-    DBHelper.dbPromise().then(db => {
-      const index = db.transaction('restaurants').objectStore('restaurants');
-      index.getAll().then(restaurantsFromIDB => {
-        if (restaurantsFromIDB.length) {
-          // Return items from the store if we have those.
-          console.log(`Items from IDB: ${restaurantsFromIDB}`);
-          callback(null, restaurantsFromIDB);
-        } else {
-          // Otherwise go to the network.
-          console.log('Nothing in IDB store yet. Hitting the network...');
-          // Make an API request and parse the data as JSON
-          const APIrequest = fetch(DBHelper.DATABASE_URL)
-            .then(response => response.json())
-            .catch(error => {
-              throw new Error(`Could not fetch restaurants: ${error.status}`);
-            });
-
-          APIrequest.then(restaurants => {
-            // Write items to IDB for next visit
-            DBHelper.dbPromise().then(db => {
-              if (!db) return;
-
-              const tx = db.transaction('restaurants', 'readwrite');
-              const store = tx.objectStore('restaurants');
-
-              restaurants.forEach(message => {
-                store.put(message);
-              });
-            });
-
-            // Return the restaurant data
-            callback(null, restaurants);
-          }).catch(error => {
-            throw new Error(
-              `Something's wrong with the API response: ${error}`
-            );
-            callback(error, null);
-          });
-        }
-      });
+  static fetchRestaurants() {
+    return DBHelper.getDataFromIDB().then(restaurantsFromIDB => {
+      if (restaurantsFromIDB.length) {
+        console.log(`FROM IDB: ${restaurantsFromIDB}`);
+        return restaurantsFromIDB;
+      } else {
+        // Make an API request and parse the data as JSON
+        return DBHelper.getDataFromAPI().then(restaurantsFromAPI => {
+          console.log(`FROM API: ${restaurantsFromAPI}`);
+          return restaurantsFromAPI;
+        });
+      }
     });
   }
 
@@ -77,7 +84,7 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants().then((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -98,7 +105,7 @@ class DBHelper {
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
     // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants().then((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -114,7 +121,7 @@ class DBHelper {
    */
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants().then((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -134,7 +141,7 @@ class DBHelper {
     callback
   ) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants().then((restaurants, error) => {
       if (error) {
         callback(error, null);
       } else {
@@ -157,7 +164,7 @@ class DBHelper {
    */
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    return DBHelper.fetchRestaurants().then((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -169,6 +176,8 @@ class DBHelper {
         const uniqueNeighborhoods = neighborhoods.filter(
           (v, i) => neighborhoods.indexOf(v) == i
         );
+        console.log(uniqueNeighborhoods);
+        // return uniqueNeighborhoods;
         callback(null, uniqueNeighborhoods);
       }
     });
@@ -179,7 +188,7 @@ class DBHelper {
    */
   static fetchCuisines(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants().then((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {

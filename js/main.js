@@ -5,7 +5,7 @@ var markers = [];
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', event => {
+document.addEventListener('DOMContentLoaded', () => {
   fetchNeighborhoods();
   fetchCuisines();
   registerServiceWorker();
@@ -26,7 +26,7 @@ registerServiceWorker = () => {
  * Fetch all neighborhoods and set their HTML.
  */
 fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+  DBHelper.fetchNeighborhoods().then((neighborhoods, error) => {
     if (error) {
       // Got an error
       console.error(error);
@@ -54,7 +54,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * Fetch all cuisines and set their HTML.
  */
 fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
+  DBHelper.fetchCuisines().then((error, cuisines) => {
     if (error) {
       // Got an error!
       console.error(error);
