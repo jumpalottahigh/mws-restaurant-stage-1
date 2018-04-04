@@ -214,11 +214,4 @@ window.addEventListener('load', () => {
       .querySelector('iframe')
       .setAttribute('title', 'Map of restaurants in New York');
   }, 2000);
-
-  // Register ServiceWorker.
-  if (navigator.serviceWorker) {
-    navigator.serviceWorker
-      .register('sw.js')
-      .then(() => console.log('SW is registered!'));
-  }
 });
