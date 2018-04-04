@@ -1,11 +1,11 @@
 /**
  * Register ServiceWorker.
  */
-// if (navigator.serviceWorker) {
-//   navigator.serviceWorker
-//     .register('sw.js')
-//     .then(() => console.log('SW is registered!'));
-// }
+if (navigator.serviceWorker) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .then(() => console.log('SW is registered!'));
+}
 
 /**
  * Common database helper functions.
@@ -68,6 +68,7 @@ class DBHelper {
       .then(data => {
         // Write items to IDB for next visit
         DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
+        console.log(data);
         return data;
       });
   }
@@ -75,21 +76,23 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants() {
-    return DBHelper.loadFromIDB('restaurants', 'restaurants').then(
-      restaurantsFromIDB => {
-        if (restaurantsFromIDB.length) {
-          console.log(`FROM IDB: ${restaurantsFromIDB}`);
-          return restaurantsFromIDB;
-        } else {
-          // Make an API request and parse the data as JSON
-          return DBHelper.loadFromAPI().then(restaurantsFromAPI => {
-            console.log(`FROM API: ${restaurantsFromAPI}`);
-            return restaurantsFromAPI;
-          });
+  static fetchRestaurants(callback) {
+    DBHelper.loadFromIDB('restaurants', 'restaurants')
+      .then(data => {
+        if (data.length == 0) {
+          // Make an API request
+          return DBHelper.loadFromAPI();
         }
-      }
-    );
+        console.log(`FROM IDB: ${data}`);
+        return Promise.resolve(data);
+      })
+      .then(restaurants => {
+        callback(null, restaurants);
+      })
+      .catch(error => {
+        console.log(`Something is wrong: ${error}`);
+        callback(error, null);
+      });
   }
 
   /**
@@ -97,7 +100,7 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants().then((error, restaurants) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -118,7 +121,7 @@ class DBHelper {
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
     // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants().then((error, restaurants) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -134,7 +137,7 @@ class DBHelper {
    */
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants().then((error, restaurants) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -154,7 +157,7 @@ class DBHelper {
     callback
   ) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants().then((restaurants, error) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -177,7 +180,7 @@ class DBHelper {
    */
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
-    return DBHelper.fetchRestaurants().then((error, restaurants) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
@@ -201,7 +204,7 @@ class DBHelper {
    */
   static fetchCuisines(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants().then((error, restaurants) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {

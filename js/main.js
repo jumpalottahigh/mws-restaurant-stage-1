@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * Fetch all neighborhoods and set their HTML.
  */
 fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods().then((error, neighborhoods) => {
+  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
     if (error) {
       // Got an error
       console.error(error);
@@ -42,7 +42,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * Fetch all cuisines and set their HTML.
  */
 fetchCuisines = () => {
-  DBHelper.fetchCuisines().then((error, cuisines) => {
+  DBHelper.fetchCuisines((error, cuisines) => {
     if (error) {
       // Got an error!
       console.error(error);
