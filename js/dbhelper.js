@@ -1,11 +1,11 @@
 /**
  * Register ServiceWorker.
  */
-if (navigator.serviceWorker) {
-  navigator.serviceWorker
-    .register('sw.js')
-    .then(() => console.log('SW is registered!'));
-}
+// if (navigator.serviceWorker) {
+//   navigator.serviceWorker
+//     .register('sw.js')
+//     .then(() => console.log('SW is registered!'));
+// }
 
 /**
  * Common database helper functions.
@@ -21,71 +21,75 @@ class DBHelper {
   }
 
   /**
-   * Get IDB promise.
+   * Open IDB.
    */
-  static dbPromise() {
-    // If we don't have SW support we have little use for the IDB
-    if (!navigator.serviceWorker) return;
-
+  static openIDB() {
     return idb.open('restaurantReviewsApp', 1, upgradeDb => {
-      const store = upgradeDb.createObjectStore('restaurants', {
-        keyPath: 'id'
-      });
+      if (!upgradeDb.objectStoreNames.contains('restaurants')) {
+        const store = upgradeDb.createObjectStore('restaurants', {
+          keyPath: 'id'
+        });
+      }
     });
   }
 
   /**
-   * Get data from IDB.
+   * Load from IDB.
    */
-  static getDataFromIDB() {
-    return DBHelper.dbPromise().then(db => {
-      const index = db.transaction('restaurants').objectStore('restaurants');
+  static loadFromIDB(transactionName, storeName) {
+    return DBHelper.openIDB().then(db => {
+      const index = db.transaction(transactionName).objectStore(storeName);
       return index.getAll();
+    });
+  }
+
+  /**
+   * Save to IDB.
+   */
+  static saveToIDB(data, transactionName, storeName) {
+    return DBHelper.openIDB().then(db => {
+      if (!db) return;
+
+      const tx = db.transaction(transactionName, 'readwrite');
+      const store = tx.objectStore(storeName);
+
+      data.forEach(bit => store.put(bit));
+
+      return tx.complete;
     });
   }
 
   /**
    * Get data from API.
    */
-  static getDataFromAPI() {
-    const APIrequest = fetch(DBHelper.DATABASE_URL)
+  static loadFromAPI() {
+    return fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
-      .catch(error => {
-        throw new Error(`Could not fetch restaurants: ${error.status}`);
+      .then(data => {
+        // Write items to IDB for next visit
+        DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
+        return data;
       });
-
-    return APIrequest.then(restaurants => {
-      // Write items to IDB for next visit
-      DBHelper.dbPromise().then(db => {
-        if (!db) return;
-
-        const tx = db.transaction('restaurants', 'readwrite');
-        const store = tx.objectStore('restaurants');
-
-        restaurants.forEach(message => {
-          store.put(message);
-        });
-      });
-      return restaurants;
-    });
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants() {
-    return DBHelper.getDataFromIDB().then(restaurantsFromIDB => {
-      if (restaurantsFromIDB.length) {
-        console.log(`FROM IDB: ${restaurantsFromIDB}`);
-        return restaurantsFromIDB;
-      } else {
-        // Make an API request and parse the data as JSON
-        return DBHelper.getDataFromAPI().then(restaurantsFromAPI => {
-          console.log(`FROM API: ${restaurantsFromAPI}`);
-          return restaurantsFromAPI;
-        });
+    return DBHelper.loadFromIDB('restaurants', 'restaurants').then(
+      restaurantsFromIDB => {
+        if (restaurantsFromIDB.length) {
+          console.log(`FROM IDB: ${restaurantsFromIDB}`);
+          return restaurantsFromIDB;
+        } else {
+          // Make an API request and parse the data as JSON
+          return DBHelper.loadFromAPI().then(restaurantsFromAPI => {
+            console.log(`FROM API: ${restaurantsFromAPI}`);
+            return restaurantsFromAPI;
+          });
+        }
       }
-    });
+    );
   }
 
   /**

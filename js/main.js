@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * Fetch all neighborhoods and set their HTML.
  */
 fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods().then((neighborhoods, error) => {
+  DBHelper.fetchNeighborhoods().then((error, neighborhoods) => {
     if (error) {
       // Got an error
       console.error(error);
