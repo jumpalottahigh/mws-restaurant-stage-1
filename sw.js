@@ -1,4 +1,4 @@
-const currentCacheVersion = 'mws-restaurant-v36';
+const currentCacheVersion = 'mws-restaurant-v37';
 const imagesToCache = [
   '/img/1.webp',
   '/img/2.webp',

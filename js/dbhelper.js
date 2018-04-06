@@ -84,7 +84,7 @@ class DBHelper {
           return DBHelper.loadFromAPI();
         }
         console.log(`FROM IDB: ${data}`);
-        return Promise.resolve(data);
+        return data;
       })
       .then(restaurants => {
         callback(null, restaurants);
