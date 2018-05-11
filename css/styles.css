@@ -205,6 +205,13 @@ nav.breadcrumb {
 /* Make restaurant button links always fixed to bottom of card */
 #restaurants-list li a {
   margin-top: auto !important;
+  width: 90%;
+}
+
+#restaurants-list li span {
+  width: 9%;
+  cursor: pointer;
+  user-select: none;
 }
 
 #restaurants-list .restaurant-img {

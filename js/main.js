@@ -192,6 +192,21 @@ createRestaurantHTML = restaurant => {
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more);
 
+  const favorite = document.createElement('span');
+  favorite.innerHTML = '🖤';
+  favorite.dataset.liked = false;
+
+  favorite.addEventListener('click', e => {
+    if (e.target.dataset.liked == 'false') {
+      e.target.dataset.liked = true;
+      e.target.innerHTML = '💜';
+    } else {
+      e.target.dataset.liked = false;
+      e.target.innerHTML = '🖤';
+    }
+  });
+  li.append(favorite);
+
   return li;
 };
 
