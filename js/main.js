@@ -2,6 +2,8 @@ let restaurants, neighborhoods, cuisines;
 var map;
 var markers = [];
 
+var myLazyLoad = new LazyLoad();
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -149,25 +151,25 @@ createRestaurantHTML = restaurant => {
   // Responsive Webp for Chrome
   const source700Webp = document.createElement('source');
   source700Webp.media = '(min-width: 700px) and (max-width: 1380px)';
-  source700Webp.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+  source700Webp.dataset.srcset = DBHelper.imageUrlForRestaurant(restaurant)
     .split('.jpg')
     .join('_400.webp');
 
   const sourceWebp = document.createElement('source');
-  sourceWebp.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+  sourceWebp.dataset.srcset = DBHelper.imageUrlForRestaurant(restaurant)
     .split('.jpg')
     .join('.webp');
 
   // Responsive JPG
   const source700 = document.createElement('source');
   source700.media = '(min-width: 700px) and (max-width: 1380px)';
-  source700.srcset = DBHelper.imageUrlForRestaurant(restaurant)
+  source700.dataset.srcset = DBHelper.imageUrlForRestaurant(restaurant)
     .split('.jpg')
     .join('_400.jpg');
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = `Restaurant ${restaurant.name}`;
   picture.append(source700Webp);
   picture.append(source700);
@@ -228,6 +230,9 @@ addMarkersToMap = (restaurants = self.restaurants) => {
  * Add title attribute to the map iframe.
  */
 window.addEventListener('load', () => {
+  // Update lazy loaded images
+  myLazyLoad.update();
+
   const iframe = document.querySelector('iframe');
   if (!iframe) return;
   iframe.setAttribute('title', 'map of restaurants');
