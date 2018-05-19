@@ -23,9 +23,6 @@
   </header>
 
   <main id="maincontent" role="main">
-    <section id="map-container">
-      <div id="map" tabindex="0" role="application" aria-label="Map with restaurants in New York city"></div>
-    </section>
     <section id="filter-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
@@ -39,6 +36,10 @@
     </section>
     <section id="restaurants-container">
       <ul id="restaurants-list"></ul>
+    </section>
+    <section id="static-map-container"></section>
+    <section id="map-container">
+      <div id="map" tabindex="0" role="application" aria-label="Map with restaurants in New York city"></div>
     </section>
   </main>
 
@@ -54,7 +55,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.7.1/lazyload.min.js"></script>
   <script defer src="js/dbhelper.js"></script>
   <script defer src="js/main.js"></script>
-  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_S9Z-6zktuRp_GiEL2iTXUAKf_q-p7UY&libraries=places&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js"></script>
 </body>
 
 </html>

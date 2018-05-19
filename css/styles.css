@@ -150,6 +150,30 @@ nav.breadcrumb {
   background-color: #ccc;
 }
 
+#map-container {
+  display: none;
+}
+
+#static-map-container {
+  height: 400px;
+}
+
+#static-map-container .lazy {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#static-map-container .label {
+  font-size: 5rem;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #0175d8;
+  padding: 0.25rem 0.5rem;
+}
+
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
   width: 100%;

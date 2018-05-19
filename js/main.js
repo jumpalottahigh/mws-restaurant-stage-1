@@ -2,7 +2,9 @@ let restaurants, neighborhoods, cuisines;
 var map;
 var markers = [];
 
-var myLazyLoad = new LazyLoad();
+var myLazyLoad = new LazyLoad({
+  elements_selector: 'img, .lazy'
+});
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -10,6 +12,29 @@ var myLazyLoad = new LazyLoad();
 document.addEventListener('DOMContentLoaded', () => {
   fetchNeighborhoods();
   fetchCuisines();
+
+  updateRestaurants();
+
+  // inject static map image
+  const staticMapContainer = document.getElementById('static-map-container');
+  const mapContainer = document.getElementById('map-container');
+  const staticMap = document.createElement('div');
+  staticMap.className = 'lazy';
+  staticMap.dataset.src = 'staticmap.png';
+  // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
+
+  staticMap.addEventListener('click', () => {
+    initMap();
+    staticMapContainer.style.display = 'none';
+    mapContainer.style.display = 'block';
+  });
+
+  const label = document.createElement('div');
+  label.className = 'label';
+  label.innerText = 'Show on map';
+
+  staticMap.append(label);
+  staticMapContainer.append(staticMap);
 });
 
 /**
