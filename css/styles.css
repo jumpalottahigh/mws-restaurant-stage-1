@@ -70,6 +70,7 @@ section {
 
 #maincontent {
   display: grid;
+  grid-gap: 20px;
   background-color: #f3f3f3;
 }
 
@@ -164,6 +165,8 @@ nav.breadcrumb {
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #static-map-container .backdrop {
@@ -242,18 +245,20 @@ nav.breadcrumb {
   display: flex;
   flex-flow: column wrap;
   padding: 20px;
+  padding-top: 0;
+}
+
+#restaurants-list li.liked {
+  border: 1px solid #886ce4;
 }
 
 /* Make restaurant button links always fixed to bottom of card */
 #restaurants-list li a {
   margin-top: auto !important;
-  width: 90%;
 }
 
 #restaurants-list li span {
-  font-size: 42px;
-  line-height: 42px;
-  width: 9%;
+  font-size: 24px;
   cursor: pointer;
   user-select: none;
 }
@@ -460,12 +465,8 @@ nav.breadcrumb {
 
 @media screen and (min-width: 980px) {
   #maincontent {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-  }
-
-  #filter-container {
-    padding: 0 0 0 15px;
   }
 
   .filter-options {
