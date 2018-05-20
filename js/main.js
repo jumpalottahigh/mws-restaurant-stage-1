@@ -151,6 +151,32 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = restaurant => {
   const li = document.createElement('li');
 
+  const favoriteContainer = document.createElement('div');
+  favoriteContainer.style.textAlign = 'right';
+  const favorite = document.createElement('span');
+  favorite.innerText = '🖤';
+  favorite.style.opacity = '0.7';
+  favorite.style.transition = '475ms';
+  favorite.dataset.liked = false;
+  // TODO: add accessibility descriptor for emoji (as in CRA)
+
+  favorite.addEventListener('click', e => {
+    if (e.target.dataset.liked == 'false') {
+      e.target.dataset.liked = true;
+      e.target.innerText = '💜';
+      e.target.style.opacity = '1';
+      e.target.parentNode.parentNode.classList.add('liked');
+    } else {
+      e.target.dataset.liked = false;
+      e.target.innerText = '🖤';
+      e.target.style.opacity = '0.7';
+      e.target.parentNode.parentNode.classList.remove('liked');
+    }
+  });
+
+  favoriteContainer.append(favorite);
+  li.append(favoriteContainer);
+
   // Create picture tag to wrap responsive image sources
   const picture = document.createElement('picture');
 
@@ -198,31 +224,12 @@ createRestaurantHTML = restaurant => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  // li.append(more);
+  li.append(more);
 
-  const favorite = document.createElement('span');
-  favorite.innerText = '🖤';
-  favorite.style.opacity = '0.7';
-  favorite.dataset.liked = false;
-
-  favorite.addEventListener('click', e => {
-    if (e.target.dataset.liked == 'false') {
-      e.target.dataset.liked = true;
-      e.target.innerText = '💜';
-      e.target.style.opacity = '1';
-    } else {
-      e.target.dataset.liked = false;
-      e.target.innerText = '🖤';
-      e.target.style.opacity = '0.7';
-    }
-  });
-
-  const linksContainer = document.createElement('div');
-  linksContainer.append(more);
-  linksContainer.append(favorite);
-  li.append(linksContainer);
-
-  // li.append(favorite);
+  // const linksContainer = document.createElement('div');
+  // linksContainer.append(more);
+  // linksContainer.append(favorite);
+  // li.append(linksContainer);
 
   return li;
 };
