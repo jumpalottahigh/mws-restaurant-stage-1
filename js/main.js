@@ -226,11 +226,6 @@ createRestaurantHTML = restaurant => {
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more);
 
-  // const linksContainer = document.createElement('div');
-  // linksContainer.append(more);
-  // linksContainer.append(favorite);
-  // li.append(linksContainer);
-
   return li;
 };
 
@@ -243,6 +238,17 @@ createStaticMapHTML = () => {
   const staticMap = document.createElement('div');
   staticMap.className = 'lazy';
   staticMap.dataset.src = 'staticmap.png';
+
+  // const staticMap = document.createElement('img');
+  // staticMap.className = 'lazy';
+  // staticMap.dataset.src = 'img/static-map/staticmap_1200.jpg';
+
+  //   <picture>
+  //     <source media="(min-width: 1024px)" data-srcset="/your/image1a.jpg" />
+  //     <source media="(min-width: 500px)" data-srcset="/your/image1b.jpg" />
+  //     <img alt="Stivaletti" data-src="/your/image1.jpg">
+  // </picture>
+
   // TODO: add correct aria label as the image is a background image?
   // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
 
