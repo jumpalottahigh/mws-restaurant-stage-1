@@ -239,23 +239,23 @@ createStaticMapHTML = () => {
   // TODO: add correct aria label as the image is a background image?
   // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
 
+  // Backdrop to highlight button better
+  const backdrop = document.createElement('div');
+  backdrop.className = 'backdrop';
+
+  // button on top of static map to denote interactivity
+  const button = document.createElement('button');
+  button.className = 'button';
+  button.innerText = 'Show on map';
+
   // Click event listener to load map on demand
-  staticMap.addEventListener('click', () => {
+  button.addEventListener('click', () => {
     window.initMap();
     staticMapContainer.style.display = 'none';
     mapContainer.style.display = 'block';
   });
 
-  // Backdrop to highlight label better
-  const backdrop = document.createElement('div');
-  backdrop.className = 'backdrop';
-
-  // Label on top of static map to denote interactivity
-  const label = document.createElement('div');
-  label.className = 'label';
-  label.innerText = 'Show on map';
-
-  staticMap.append(label);
+  staticMap.append(button);
   staticMapContainer.append(backdrop);
   staticMapContainer.append(staticMap);
 };
