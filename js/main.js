@@ -15,26 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateRestaurants();
 
-  // inject static map image
-  const staticMapContainer = document.getElementById('static-map-container');
-  const mapContainer = document.getElementById('map-container');
-  const staticMap = document.createElement('div');
-  staticMap.className = 'lazy';
-  staticMap.dataset.src = 'staticmap.png';
-  // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
-
-  staticMap.addEventListener('click', () => {
-    initMap();
-    staticMapContainer.style.display = 'none';
-    mapContainer.style.display = 'block';
-  });
-
-  const label = document.createElement('div');
-  label.className = 'label';
-  label.innerText = 'Show on map';
-
-  staticMap.append(label);
-  staticMapContainer.append(staticMap);
+  createStaticMapHTML();
 });
 
 /**
@@ -217,24 +198,66 @@ createRestaurantHTML = restaurant => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more);
+  // li.append(more);
 
   const favorite = document.createElement('span');
-  favorite.innerHTML = '🖤';
+  favorite.innerText = '🖤';
+  favorite.style.opacity = '0.7';
   favorite.dataset.liked = false;
 
   favorite.addEventListener('click', e => {
     if (e.target.dataset.liked == 'false') {
       e.target.dataset.liked = true;
-      e.target.innerHTML = '💜';
+      e.target.innerText = '💜';
+      e.target.style.opacity = '1';
     } else {
       e.target.dataset.liked = false;
-      e.target.innerHTML = '🖤';
+      e.target.innerText = '🖤';
+      e.target.style.opacity = '0.7';
     }
   });
-  li.append(favorite);
+
+  const linksContainer = document.createElement('div');
+  linksContainer.append(more);
+  linksContainer.append(favorite);
+  li.append(linksContainer);
+
+  // li.append(favorite);
 
   return li;
+};
+
+/**
+ * Add markers for current restaurants to the map.
+ */
+createStaticMapHTML = () => {
+  const staticMapContainer = document.getElementById('static-map-container');
+  const mapContainer = document.getElementById('map-container');
+  const staticMap = document.createElement('div');
+  staticMap.className = 'lazy';
+  staticMap.dataset.src = 'staticmap.png';
+  // TODO: add correct aria label as the image is a background image?
+  // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
+
+  // Click event listener to load map on demand
+  staticMap.addEventListener('click', () => {
+    window.initMap();
+    staticMapContainer.style.display = 'none';
+    mapContainer.style.display = 'block';
+  });
+
+  // Backdrop to highlight label better
+  const backdrop = document.createElement('div');
+  backdrop.className = 'backdrop';
+
+  // Label on top of static map to denote interactivity
+  const label = document.createElement('div');
+  label.className = 'label';
+  label.innerText = 'Show on map';
+
+  staticMap.append(label);
+  staticMapContainer.append(backdrop);
+  staticMapContainer.append(staticMap);
 };
 
 /**
