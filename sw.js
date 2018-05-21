@@ -1,4 +1,4 @@
-const currentCacheVersion = 'mws-restaurant-v37';
+const currentCacheVersion = 'mws-restaurant-v38';
 const imagesToCache = [
   '/img/1.webp',
   '/img/2.webp',
@@ -59,7 +59,11 @@ const imagesToCache = [
   '/img/7_800.jpg',
   '/img/8_800.jpg',
   '/img/9_800.jpg',
-  '/img/10_800.jpg'
+  '/img/10_800.jpg',
+  '/static-map/staticmap_400.jpg',
+  '/static-map/staticmap_600.jpg',
+  '/static-map/staticmap_800.jpg',
+  '/static-map/staticmap_1200.jpg'
 ];
 
 const resourcesToCache = [

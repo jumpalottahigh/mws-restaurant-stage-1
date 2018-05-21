@@ -12,9 +12,7 @@ var myLazyLoad = new LazyLoad({
 document.addEventListener('DOMContentLoaded', () => {
   fetchNeighborhoods();
   fetchCuisines();
-
   updateRestaurants();
-
   createStaticMapHTML();
 });
 
