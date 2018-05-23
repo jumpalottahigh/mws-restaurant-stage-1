@@ -39,12 +39,6 @@
 
   <!-- Beginning main -->
   <main id="maincontent" role="main">
-    <!-- Beginning map -->
-    <section id="static-map-container"></section>
-    <section id="map-container">
-      <div id="map" tabindex="0" role="application"></div>
-    </section>
-    <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
       <h2 id="restaurant-name"></h2>
@@ -52,12 +46,19 @@
       <p id="restaurant-cuisine"></p>
       <p id="restaurant-address"></p>
       <table id="restaurant-hours"></table>
+      <button id="restaurant-on-map" class="button">Show on map</button>
+      <!-- Beginning map -->
+      <section id="map-container">
+        <div id="map" tabindex="0" role="application"></div>
+      </section>
+      <!-- End map -->
     </section>
     <!-- end restaurant -->
-    <!-- Beginning reviews -->
+
     <!-- Beginning review form -->
     <section id="review-form-container">
       <!-- TODO: remove <BR/>, decide label vs placeholder, work on logic -->
+      <h3>Leave a review:</h3>
       <form method="post" action="#">
         <fieldset>
           <label for="review-name">Name:</label>
@@ -83,9 +84,9 @@
           <input type="submit" value="Send">
         </fieldset>
       </form>
-
     </section>
     <!-- End review form -->
+    <!-- Beginning reviews -->
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
     </section>

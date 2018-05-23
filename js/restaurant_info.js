@@ -11,7 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(error);
     } else {
       fillBreadcrumb();
-      createStaticMapHTML();
+
+      const showMapBtn = document.getElementById('restaurant-on-map');
+      showMapBtn.addEventListener('click', () => {
+        document.getElementById('map-container').style.display = 'block';
+        window.initMap();
+        showMapBtn.style.display = 'none';
+      });
     }
   });
 });
@@ -34,51 +40,6 @@ window.initMap = () => {
       'aria-label',
       `Map with restaurant ${self.restaurant.name}'s location in New York city`
     );
-};
-
-/**
- * Add markers for current restaurants to the map.
- */
-createStaticMapHTML = () => {
-  const staticMapContainer = document.getElementById('static-map-container');
-  const mapContainer = document.getElementById('map-container');
-  const staticMap = document.createElement('div');
-  staticMap.className = 'lazy';
-  staticMap.dataset.src = 'staticmap.png';
-
-  // TODO: add responsive images
-  // const staticMap = document.createElement('img');
-  // staticMap.className = 'lazy';
-  // staticMap.dataset.src = 'img/static-map/staticmap_1200.jpg';
-
-  //   <picture>
-  //     <source media="(min-width: 1024px)" data-srcset="/your/image1a.jpg" />
-  //     <source media="(min-width: 500px)" data-srcset="/your/image1b.jpg" />
-  //     <img alt="Stivaletti" data-src="/your/image1.jpg">
-  // </picture>
-
-  // TODO: add correct aria label as the image is a background image?
-  // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
-
-  // Backdrop to highlight button better
-  const backdrop = document.createElement('div');
-  backdrop.className = 'backdrop';
-
-  // button on top of static map to denote interactivity
-  const button = document.createElement('button');
-  button.className = 'button';
-  button.innerText = 'Show on map';
-
-  // Click event listener to load map on demand
-  button.addEventListener('click', () => {
-    window.initMap();
-    staticMapContainer.style.display = 'none';
-    mapContainer.style.display = 'block';
-  });
-
-  staticMap.append(button);
-  staticMapContainer.append(backdrop);
-  staticMapContainer.append(staticMap);
 };
 
 /**
