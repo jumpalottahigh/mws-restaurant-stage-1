@@ -57,32 +57,29 @@
 
     <!-- Beginning review form -->
     <section id="review-form-container">
-      <!-- TODO: remove <BR/>, decide label vs placeholder, work on logic -->
       <h3>Leave a review:</h3>
       <form method="post" action="#">
-        <fieldset>
+        <div class="review-form-wrapper">
           <label for="review-name">Name:</label>
-          <input type="text" id="review-name" placeholder="Name..." aria-label="Name" aria-required="true" required>
-          <br>
+          <input type="text" id="review-name" aria-label="Name" aria-required="true" required>
 
           <label for="review-text">Review:</label>
-          <textarea type="textarea" id="review-text" aria-label="Review text" rows="3" aria-required="true" required minlength="10"></textarea>
-          <br>
+          <textarea type="textarea" id="review-text" aria-label="Review text" rows="4" aria-required="true" required minlength="10"></textarea>
 
-          <input type="radio" id="feedback-good" name="feedback" value="good" checked>
-          <label for="feedback-good">🎉 Good</label>
-          <br>
+          <label for="feedback-good">
+            <input type="radio" id="feedback-good" name="feedback" value="good" checked> 🎉 Good
+          </label>
 
-          <input type="radio" id="feedback-average" name="feedback" value="average">
-          <label for="feedback-average">⚖️ Average</label>
-          <br>
+          <label for="feedback-average">
+            <input type="radio" id="feedback-average" name="feedback" value="average"> ⚖️ Average
+          </label>
 
-          <input type="radio" id="feedback-bad" name="feedback" value="bad">
-          <label for="feedback-bad">💩 Bad</label>
-          <br>
+          <label for="feedback-bad">
+            <input type="radio" id="feedback-bad" name="feedback" value="bad"> 💩 Bad
+          </label>
 
           <input type="submit" value="Send">
-        </fieldset>
+        </div>
       </form>
     </section>
     <!-- End review form -->

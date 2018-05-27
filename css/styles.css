@@ -321,10 +321,8 @@ nav.breadcrumb {
 }
 
 .inside #map-container {
-  /* background: blue none repeat scroll 0 0; */
   height: 400px;
   width: 100%;
-  /* padding: 124px 0 0 0; */
 }
 
 .inside #map {
@@ -380,6 +378,36 @@ nav.breadcrumb {
   display: flex;
   flex-flow: column wrap;
   padding: 10px 20px;
+}
+
+#review-form-container {
+  padding: 10px 20px;
+}
+
+.review-form-wrapper {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.review-form-wrapper input[type='text'] {
+  height: 28px;
+}
+
+.review-form-wrapper input[type='submit'] {
+  border-radius: 4px;
+  width: 150px;
+  justify-self: center;
+  box-shadow: 2px 2px 8px 2px #cecece;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid tomato;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.review-form-wrapper input[type='submit']:hover {
+  box-shadow: none;
+  background-color: tomato;
 }
 
 #reviews-container h3,
@@ -462,10 +490,6 @@ nav.breadcrumb {
     text-align: left;
   }
 
-  #review-form-container {
-    background: #fff;
-  }
-
   #restaurant-img {
     max-width: 800px;
     margin: 0 auto;
@@ -523,7 +547,7 @@ nav.breadcrumb {
 
   .inside #review-form-container {
     align-content: flex-start;
-    padding: 124px 0 0 0;
+    padding: 124px 20px 0 20px;
   }
 
   .inside #restaurant-container {
