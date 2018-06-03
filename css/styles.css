@@ -386,7 +386,11 @@ nav.breadcrumb {
 
 .review-form-wrapper {
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 20px;
+}
+
+.review-form-wrapper p {
+  margin: 0;
 }
 
 .review-form-wrapper input[type='text'] {
@@ -408,6 +412,11 @@ nav.breadcrumb {
 .review-form-wrapper input[type='submit']:hover {
   box-shadow: none;
   background-color: tomato;
+}
+
+.review-form-radio-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
 #reviews-container h3,

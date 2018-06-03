@@ -58,27 +58,40 @@
     <!-- Beginning review form -->
     <section id="review-form-container">
       <h3>Leave a review:</h3>
-      <form method="post" action="#">
+      <form id="review-form" method="post" action="#">
         <div class="review-form-wrapper">
           <label for="review-name">Name:</label>
-          <input type="text" id="review-name" aria-label="Name" aria-required="true" required>
+          <!-- TODO: add required -->
+          <input type="text" id="review-name" aria-label="Name" aria-required="true">
 
+          <!-- TODO: add required and minlength="10" -->
           <label for="review-text">Review:</label>
-          <textarea type="textarea" id="review-text" aria-label="Review text" rows="4" aria-required="true" required minlength="10"></textarea>
+          <textarea type="textarea" id="review-text" aria-label="Review text" rows="4" aria-required="true"></textarea>
 
-          <label for="feedback-good">
-            <input type="radio" id="feedback-good" name="feedback" value="good" checked> 🎉 Good
-          </label>
+          <p>Rating:</p>
+          <div class="review-form-radio-wrapper">
+            <label for="rating5" tabindex="0" aria-label="Rating 5 out of 5">
+              <input type="radio" id="rating5" name="rating" value="5"> 😍 5
+            </label>
 
-          <label for="feedback-average">
-            <input type="radio" id="feedback-average" name="feedback" value="average"> ⚖️ Average
-          </label>
+            <label for="rating4" tabindex="0" aria-label="Rating 4 out of 5">
+              <input type="radio" id="rating4" name="rating" value="4"> 😃 4
+            </label>
 
-          <label for="feedback-bad">
-            <input type="radio" id="feedback-bad" name="feedback" value="bad"> 💩 Bad
-          </label>
+            <label for="rating3" tabindex="0" aria-label="Rating 3 out of 5">
+              <input type="radio" id="rating3" name="rating" value="3" checked> 🙂 3
+            </label>
 
-          <input type="submit" value="Send">
+            <label for="rating2" tabindex="0" aria-label="Rating 2 out of 5">
+              <input type="radio" id="rating2" name="rating" value="2"> 🙁 2
+            </label>
+
+            <label for="rating1" tabindex="0" aria-label="Rating 1 out of 5">
+              <input type="radio" id="rating1" name="rating" value="1"> 💩 1
+            </label>
+          </div>
+
+          <input type="submit" id="review-submit" value="Send">
         </div>
       </form>
     </section>
