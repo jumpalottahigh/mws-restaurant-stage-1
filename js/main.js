@@ -152,24 +152,48 @@ createRestaurantHTML = restaurant => {
   const favoriteContainer = document.createElement('div');
   favoriteContainer.style.textAlign = 'right';
   const favorite = document.createElement('span');
-  favorite.innerText = '🖤';
-  favorite.style.opacity = '0.7';
   favorite.style.transition = '475ms';
-  favorite.dataset.liked = false;
-  // TODO: add accessibility descriptor for emoji (as in CRA)
+  favorite.setAttribute('role', 'img');
+  favorite.setAttribute('aria-label', 'heart emoji');
+
+  // Set is_favorite by default to false if non existent
+  if (restaurant.is_favorite == null || restaurant.is_favorite == undefined) {
+    restaurant.is_favorite = false;
+  }
+
+  favorite.dataset.liked = restaurant.is_favorite;
+
+  if (favorite.dataset.liked) {
+    favorite.innerText = '💜';
+  } else {
+    favorite.innerText = '🖤';
+    favorite.style.opacity = '0.7';
+  }
 
   favorite.addEventListener('click', e => {
-    if (e.target.dataset.liked == 'false') {
-      e.target.dataset.liked = true;
-      e.target.innerText = '💜';
-      e.target.style.opacity = '1';
-      e.target.parentNode.parentNode.classList.add('liked');
-    } else {
-      e.target.dataset.liked = false;
-      e.target.innerText = '🖤';
-      e.target.style.opacity = '0.7';
-      e.target.parentNode.parentNode.classList.remove('liked');
-    }
+    DBHelper.favoriteRestaurant(restaurant, (error, response) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(restaurant);
+        // Update the UI
+        if (e.target.dataset.liked == 'false') {
+          e.target.dataset.liked = true;
+          e.target.innerText = '💜';
+          e.target.style.opacity = '1';
+          e.target.parentNode.parentNode.classList.add('liked');
+        } else {
+          e.target.dataset.liked = false;
+          e.target.innerText = '🖤';
+          e.target.style.opacity = '0.7';
+          e.target.parentNode.parentNode.classList.remove('liked');
+        }
+
+        restaurant.is_favorite = e.target.dataset.liked;
+
+        DBHelper.saveToIDB(restaurant, 'restaurants', 'restaurants');
+      }
+    });
   });
 
   favoriteContainer.append(favorite);

@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.initMap();
         showMapBtn.style.display = 'none';
       });
+
+      document
+        .getElementById('review-submit')
+        .addEventListener('click', submitReview);
     }
   });
 });
@@ -213,4 +217,42 @@ getParameterByName = (name, url) => {
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+};
+
+/**
+ * Submit a new review.
+ */
+submitReview = e => {
+  e.preventDefault();
+  // TODO: add validation
+  console.log('submitted');
+  console.log(e);
+
+  let nameNode = document.getElementById('review-name');
+  let reviewNode = document.getElementById('review-text');
+  let rating = parseInt(
+    document.querySelector('input[name="rating"]:checked').value
+  );
+
+  let name = nameNode.value;
+  let comments = reviewNode.value;
+
+  let newReview = {
+    restaurant_id: self.restaurant.id,
+    name,
+    rating,
+    comments,
+    createdAt: new Date()
+  };
+
+  console.log(newReview);
+
+  // Post review to server
+  newReview = DBHelper.postToAPI(newReview);
+
+  // Reset form
+  nameNode.value = '';
+  reviewNode.value = '';
+
+  // TODO: save to IDB
 };

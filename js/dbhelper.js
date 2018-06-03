@@ -1,11 +1,11 @@
 /**
  * Register ServiceWorker.
  */
-if (navigator.serviceWorker) {
-  navigator.serviceWorker
-    .register('sw.js')
-    .then(() => console.log('SW is registered!'));
-}
+// if (navigator.serviceWorker) {
+//   navigator.serviceWorker
+//     .register('sw.js')
+//     .then(() => console.log('SW is registered!'));
+// }
 
 /**
  * Common database helper functions.
@@ -17,7 +17,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
+    return `http://localhost:${port}`;
   }
 
   /**
@@ -63,7 +63,7 @@ class DBHelper {
    * Get data from API.
    */
   static loadFromAPI() {
-    return fetch(DBHelper.DATABASE_URL)
+    return fetch(`${DBHelper.DATABASE_URL}/restaurants`)
       .then(response => response.json())
       .then(data => {
         // Write items to IDB for next visit
@@ -252,5 +252,48 @@ class DBHelper {
       animation: google.maps.Animation.DROP
     });
     return marker;
+  }
+
+  /**
+   * Handle favoriting restaurant in the UI
+   */
+  static favoriteRestaurant(restaurant, callback) {
+    if (!restaurant) return;
+
+    fetch(
+      `${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${
+        restaurant.is_favorite
+      }`,
+      {
+        method: 'PUT'
+      }
+    )
+      .then(response => callback(null, response))
+      .catch(e => callback(e, `Could not update restaurant liked state.`));
+  }
+
+  /**
+   * Post new review to API and IDB
+   */
+  static postToAPI(review) {
+    if (!review) return;
+
+    fetch(
+      `${DBHelper.DATABASE_URL}/review/restaurant_id=${review.restaurant_id}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(review),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+      .then(resp => resp.json())
+      .then(data => {
+        DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
+      })
+      .catch(err => {
+        console.log(`Error: ${err}`);
+      });
   }
 }
