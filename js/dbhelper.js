@@ -53,7 +53,7 @@ class DBHelper {
       const tx = db.transaction(transactionName, 'readwrite');
       const store = tx.objectStore(storeName);
 
-      data.forEach(bit => store.put(bit));
+      Array.from(data).forEach(bit => store.put(bit));
 
       return tx.complete;
     });
@@ -192,7 +192,6 @@ class DBHelper {
         const uniqueNeighborhoods = neighborhoods.filter(
           (v, i) => neighborhoods.indexOf(v) == i
         );
-        console.log(uniqueNeighborhoods);
         // return uniqueNeighborhoods;
         callback(null, uniqueNeighborhoods);
       }
@@ -259,6 +258,8 @@ class DBHelper {
    */
   static favoriteRestaurant(restaurant, callback) {
     if (!restaurant) return;
+
+    console.log('THIS: ' + restaurant.is_favorite);
 
     fetch(
       `${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${

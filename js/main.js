@@ -162,8 +162,12 @@ createRestaurantHTML = restaurant => {
   }
 
   favorite.dataset.liked = restaurant.is_favorite;
+  console.log(favorite.dataset.liked);
+  console.log(restaurant.is_favorite);
 
-  if (favorite.dataset.liked) {
+  // TODO: change true from string to boolean
+  if (favorite.dataset.liked == 'true') {
+    console.log(restaurant);
     favorite.innerText = '💜';
   } else {
     favorite.innerText = '🖤';
@@ -176,6 +180,7 @@ createRestaurantHTML = restaurant => {
         console.error(error);
       } else {
         console.log(restaurant);
+
         // Update the UI
         if (e.target.dataset.liked == 'false') {
           e.target.dataset.liked = true;
