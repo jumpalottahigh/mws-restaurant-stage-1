@@ -196,7 +196,9 @@ createRestaurantHTML = restaurant => {
 
         restaurant.is_favorite = e.target.dataset.liked;
 
-        DBHelper.saveToIDB(restaurant, 'restaurants', 'restaurants');
+        DBHelper.loadFromAPI();
+
+        // DBHelper.saveToIDB(restaurant, 'restaurants', 'restaurants');
       }
     });
   });

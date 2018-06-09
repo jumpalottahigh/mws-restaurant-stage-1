@@ -30,6 +30,11 @@ class DBHelper {
           keyPath: 'id'
         });
       }
+      if (!upgradeDb.objectStoreNames.contains('reviews')) {
+        const store = upgradeDb.createObjectStore('reviews', {
+          keyPath: 'id'
+        });
+      }
     });
   }
 
@@ -236,6 +241,7 @@ class DBHelper {
       photograph = 10;
     }
 
+    console.log('runs');
     return `/img/${photograph}.jpg`;
   }
 
@@ -259,8 +265,6 @@ class DBHelper {
   static favoriteRestaurant(restaurant, callback) {
     if (!restaurant) return;
 
-    console.log('THIS: ' + restaurant.is_favorite);
-
     fetch(
       `${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${
         restaurant.is_favorite
@@ -270,7 +274,7 @@ class DBHelper {
       }
     )
       .then(response => callback(null, response))
-      .catch(e => callback(e, `Could not update restaurant liked state.`));
+      .catch(e => callback(`${e}: Could not update.`));
   }
 
   /**
@@ -279,16 +283,13 @@ class DBHelper {
   static postToAPI(review) {
     if (!review) return;
 
-    fetch(
-      `${DBHelper.DATABASE_URL}/review/restaurant_id=${review.restaurant_id}`,
-      {
-        method: 'POST',
-        body: JSON.stringify(review),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+    fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+      method: 'POST',
+      body: JSON.stringify(review),
+      headers: {
+        'Content-Type': 'application/json'
       }
-    )
+    })
       .then(resp => resp.json())
       .then(data => {
         DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
