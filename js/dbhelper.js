@@ -1,11 +1,11 @@
 /**
  * Register ServiceWorker.
  */
-// if (navigator.serviceWorker) {
-//   navigator.serviceWorker
-//     .register('sw.js')
-//     .then(() => console.log('SW is registered!'));
-// }
+if (navigator.serviceWorker) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .then(() => console.log('SW is registered!'));
+}
 
 /**
  * Common database helper functions.
