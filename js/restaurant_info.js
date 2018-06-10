@@ -121,8 +121,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
+
+  // get reviews by id
+  getReviewsById();
 };
 
 /**
@@ -150,7 +151,7 @@ fillRestaurantHoursHTML = (
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (reviews = self.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
@@ -180,7 +181,8 @@ createReviewHTML = review => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  const dateString = new Date(review.createdAt);
+  date.innerHTML = dateString.toDateString();
   li.appendChild(date);
 
   const rating = document.createElement('p');
@@ -220,14 +222,38 @@ getParameterByName = (name, url) => {
 };
 
 /**
+ * Get reviews by id
+ */
+getReviewsById = callback => {
+  if (self.reviews) {
+    callback(null, self.reviews);
+    return;
+  }
+
+  const id = getParameterByName('id');
+  if (!id) {
+    error = 'Could not get parameter id';
+    callback(error, null);
+  } else {
+    DBHelper.fetchReviewsById(id, (error, reviews) => {
+      self.reviews = reviews;
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+
+      // fill reviews
+      fillReviewsHTML();
+    });
+  }
+};
+
+/**
  * Submit a new review.
  */
 submitReview = e => {
   e.preventDefault();
-  // TODO: add validation
-  console.log('submitted');
-  console.log(e);
-
+  // TODO: add form validation
   let nameNode = document.getElementById('review-name');
   let reviewNode = document.getElementById('review-text');
   let rating = parseInt(
@@ -242,17 +268,21 @@ submitReview = e => {
     name,
     rating,
     comments,
-    createdAt: new Date()
+    createdAt: Date.now(),
+    updatedAt: Date.now()
   };
 
-  console.log(newReview);
-
   // Post review to server
-  newReview = DBHelper.postToAPI(newReview);
+  DBHelper.postToAPI(newReview).then(function() {
+    // Reset form
+    nameNode.value = '';
+    reviewNode.value = '';
 
-  // Reset form
-  nameNode.value = '';
-  reviewNode.value = '';
+    const newReviewHTML = createReviewHTML(newReview);
+    const ul = document.getElementById('reviews-list');
+    ul.appendChild(newReviewHTML);
 
-  // TODO: save to IDB
+    const reviewStatus = document.getElementById('review-status');
+    reviewStatus.innerText = 'Thanks for reviewing!';
+  });
 };

@@ -380,6 +380,12 @@ nav.breadcrumb {
   padding: 10px 20px;
 }
 
+#review-status {
+  color: #28bb51;
+  font-size: 24px;
+  text-align: center;
+}
+
 #review-form-container {
   padding: 10px 20px;
 }
@@ -503,6 +509,11 @@ nav.breadcrumb {
     max-width: 800px;
     margin: 0 auto;
   }
+
+  #review-form {
+    max-width: 80%;
+    margin: 0 auto;
+  }
 }
 
 @media screen and (min-width: 980px) {
@@ -543,7 +554,7 @@ nav.breadcrumb {
 
   .inside #maincontent {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: auto 1fr;
   }
 
   .inside #map-container {

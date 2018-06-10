@@ -30,10 +30,14 @@ class DBHelper {
           keyPath: 'id'
         });
       }
-      if (!upgradeDb.objectStoreNames.contains('reviews')) {
-        const store = upgradeDb.createObjectStore('reviews', {
-          keyPath: 'id'
-        });
+
+      for (let i = 1; i < 10; i++) {
+        if (!upgradeDb.objectStoreNames.contains(`reviews-restaurant-${i}`)) {
+          const store = upgradeDb.createObjectStore(`reviews-restaurant-${i}`, {
+            keyPath: 'id',
+            autoIncrement: true
+          });
+        }
       }
     });
   }
@@ -65,14 +69,50 @@ class DBHelper {
   }
 
   /**
+   * Save to IDB.
+   */
+  static saveReviewToIDB(data, transactionName, storeName) {
+    return DBHelper.openIDB().then(db => {
+      if (!db) return;
+
+      const tx = db.transaction(transactionName, 'readwrite');
+      const store = tx.objectStore(storeName);
+
+      store.put(data);
+
+      return tx.complete;
+    });
+  }
+
+  /**
    * Get data from API.
    */
-  static loadFromAPI() {
-    return fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+  static loadFromAPI(slug) {
+    return fetch(`${DBHelper.DATABASE_URL}/${slug}`)
       .then(response => response.json())
       .then(data => {
         // Write items to IDB for next visit
-        DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
+        DBHelper.saveToIDB(data, slug, slug);
+        return data;
+      });
+  }
+
+  /**
+   * Get reviews data from API.
+   */
+  static loadReviewsFromAPI(slug) {
+    return fetch(`${DBHelper.DATABASE_URL}/${slug}`)
+      .then(response => response.json())
+      .then(data => {
+        // Write items to IDB for next visit
+        DBHelper.saveToIDB(
+          data,
+          `reviews-restaurant-${self.restaurant.id}`,
+          `reviews-restaurant-${self.restaurant.id}`
+        );
+        console.log(
+          `Reviews data from API for restaurant: ${self.restaurant.id}`
+        );
         console.log(data);
         return data;
       });
@@ -86,7 +126,7 @@ class DBHelper {
       .then(data => {
         if (data.length == 0) {
           // Make an API request
-          return DBHelper.loadFromAPI();
+          return DBHelper.loadFromAPI('restaurants');
         }
         console.log(`FROM IDB: ${data}`);
         return data;
@@ -241,7 +281,6 @@ class DBHelper {
       photograph = 10;
     }
 
-    console.log('runs');
     return `/img/${photograph}.jpg`;
   }
 
@@ -278,12 +317,32 @@ class DBHelper {
   }
 
   /**
-   * Post new review to API and IDB
+   * Fetch all restaurant reviews
+   */
+  static fetchReviewsById(id, callback) {
+    DBHelper.loadFromIDB(`reviews-restaurant-${id}`, `reviews-restaurant-${id}`)
+      .then(data => {
+        if (data.length == 0) {
+          return DBHelper.loadReviewsFromAPI(`reviews/?restaurant_id=${id}`);
+        }
+        return Promise.resolve(data);
+      })
+      .then(reviews => {
+        callback(null, reviews);
+      })
+      .catch(err => {
+        console.log(`ERROR DB: ${err.status}`);
+        callback(err, null);
+      });
+  }
+
+  /**
+   * Post new review to API
    */
   static postToAPI(review) {
     if (!review) return;
 
-    fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+    return fetch(`${DBHelper.DATABASE_URL}/reviews`, {
       method: 'POST',
       body: JSON.stringify(review),
       headers: {
@@ -292,7 +351,13 @@ class DBHelper {
     })
       .then(resp => resp.json())
       .then(data => {
-        DBHelper.saveToIDB(data, 'restaurants', 'restaurants');
+        // save to IDB
+        DBHelper.saveReviewToIDB(
+          data,
+          `reviews-restaurant-${self.restaurant.id}`,
+          `reviews-restaurant-${self.restaurant.id}`
+        );
+        return data;
       })
       .catch(err => {
         console.log(`Error: ${err}`);

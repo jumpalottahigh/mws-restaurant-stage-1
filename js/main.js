@@ -162,12 +162,8 @@ createRestaurantHTML = restaurant => {
   }
 
   favorite.dataset.liked = restaurant.is_favorite;
-  console.log(favorite.dataset.liked);
-  console.log(restaurant.is_favorite);
 
-  // TODO: change true from string to boolean
   if (favorite.dataset.liked == 'true') {
-    console.log(restaurant);
     favorite.innerText = '💜';
   } else {
     favorite.innerText = '🖤';
@@ -196,7 +192,7 @@ createRestaurantHTML = restaurant => {
 
         restaurant.is_favorite = e.target.dataset.liked;
 
-        DBHelper.loadFromAPI();
+        DBHelper.loadFromAPI('restaurants');
 
         // DBHelper.saveToIDB(restaurant, 'restaurants', 'restaurants');
       }
