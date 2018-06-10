@@ -20,7 +20,7 @@ To build and run the project:
 
 Production assets are located in the `build/` directory.
 
-> You have to be running the API server on port `1337` from this repo: [https://github.com/udacity/mws-restaurant-stage-2](https://github.com/udacity/mws-restaurant-stage-2)
+> You have to be running the API server on port `1337` from this repo: [https://github.com/udacity/mws-restaurant-stage-3](https://github.com/udacity/mws-restaurant-stage-3)
 
 Current PWA state:
 
