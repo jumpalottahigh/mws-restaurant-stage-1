@@ -185,7 +185,7 @@ nav.breadcrumb {
   height: 400px;
 }
 
-#static-map-container .lazy {
+#static-map-container .static-map {
   display: flex;
   flex-flow: column wrap;
   justify-content: center;

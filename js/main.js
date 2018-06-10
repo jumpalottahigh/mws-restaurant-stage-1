@@ -112,6 +112,7 @@ updateRestaurants = () => {
       } else {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
+        myLazyLoad.update();
       }
     }
   );
@@ -252,21 +253,37 @@ createStaticMapHTML = () => {
   const staticMapContainer = document.getElementById('static-map-container');
   const mapContainer = document.getElementById('map-container');
   const staticMap = document.createElement('div');
-  staticMap.className = 'lazy';
-  staticMap.dataset.src = 'staticmap.png';
+  staticMap.className = 'static-map';
 
-  // const staticMap = document.createElement('img');
-  // staticMap.className = 'lazy';
-  // staticMap.dataset.src = 'img/static-map/staticmap_1200.jpg';
+  const picture = document.createElement('picture');
+  picture.style.display = 'flex';
+  picture.style.flexGrow = 1;
+  picture.style.justifySelf = 'center';
+  picture.style.position = 'absolute';
+  picture.style.maxWidth = '100%';
 
-  //   <picture>
-  //     <source media="(min-width: 1024px)" data-srcset="/your/image1a.jpg" />
-  //     <source media="(min-width: 500px)" data-srcset="/your/image1b.jpg" />
-  //     <img alt="Stivaletti" data-src="/your/image1.jpg">
-  // </picture>
+  const source600 = document.createElement('source');
+  source600.media = '(min-width: 600px) and (max-width: 799px)';
+  source600.dataset.srcset = 'img/static-map/staticmap_600.jpg';
 
-  // TODO: add correct aria label as the image is a background image?
-  // staticMap.ariaLabel = 'Google Map of 40.72, -73.98';
+  const source800 = document.createElement('source');
+  source800.media = '(min-width: 800px) and (max-width: 1199px)';
+  source800.dataset.srcset = 'img/static-map/staticmap_800.jpg';
+
+  const source1200 = document.createElement('source');
+  source1200.media = '(min-width: 1200px)';
+  source1200.dataset.srcset = 'img/static-map/staticmap_1200.jpg';
+
+  const image = document.createElement('img');
+  image.dataset.src = 'img/static-map/staticmap_400.jpg';
+  image.alt = 'Map with restaurants';
+  image.style.width = '100%';
+
+  picture.append(source1200);
+  picture.append(source800);
+  picture.append(source600);
+  picture.append(image);
+  staticMap.append(picture);
 
   // Backdrop to highlight button better
   const backdrop = document.createElement('div');
