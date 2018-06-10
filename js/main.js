@@ -171,32 +171,23 @@ createRestaurantHTML = restaurant => {
   }
 
   favorite.addEventListener('click', e => {
-    DBHelper.favoriteRestaurant(restaurant, (error, response) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log(restaurant);
+    // Update the UI
+    if (e.target.dataset.liked == 'false') {
+      e.target.dataset.liked = true;
+      e.target.innerText = '💜';
+      e.target.style.opacity = '1';
+      e.target.parentNode.parentNode.classList.add('liked');
+    } else {
+      e.target.dataset.liked = false;
+      e.target.innerText = '🖤';
+      e.target.style.opacity = '0.7';
+      e.target.parentNode.parentNode.classList.remove('liked');
+    }
 
-        // Update the UI
-        if (e.target.dataset.liked == 'false') {
-          e.target.dataset.liked = true;
-          e.target.innerText = '💜';
-          e.target.style.opacity = '1';
-          e.target.parentNode.parentNode.classList.add('liked');
-        } else {
-          e.target.dataset.liked = false;
-          e.target.innerText = '🖤';
-          e.target.style.opacity = '0.7';
-          e.target.parentNode.parentNode.classList.remove('liked');
-        }
+    restaurant.is_favorite = e.target.dataset.liked;
 
-        restaurant.is_favorite = e.target.dataset.liked;
-
-        DBHelper.loadFromAPI('restaurants');
-
-        // DBHelper.saveToIDB(restaurant, 'restaurants', 'restaurants');
-      }
-    });
+    // Update the API and IDB
+    DBHelper.favoriteRestaurant(restaurant);
   });
 
   favoriteContainer.append(favorite);

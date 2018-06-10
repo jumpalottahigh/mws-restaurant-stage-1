@@ -299,12 +299,12 @@ class DBHelper {
   }
 
   /**
-   * Handle favoriting restaurant in the UI
+   * Handle favorite restaurant, post to API and save in IDB
    */
-  static favoriteRestaurant(restaurant, callback) {
+  static favoriteRestaurant(restaurant) {
     if (!restaurant) return;
 
-    fetch(
+    return fetch(
       `${DBHelper.DATABASE_URL}/restaurants/${restaurant.id}/?is_favorite=${
         restaurant.is_favorite
       }`,
@@ -312,8 +312,12 @@ class DBHelper {
         method: 'PUT'
       }
     )
-      .then(response => callback(null, response))
-      .catch(e => callback(`${e}: Could not update.`));
+      .then(response => response.json())
+      .then(data => {
+        DBHelper.saveToIDB(self.restaurants, 'restaurants', 'restaurants');
+        return data;
+      })
+      .catch(e => console.error(`${e}: Could not update.`));
   }
 
   /**
