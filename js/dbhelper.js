@@ -1,10 +1,21 @@
 /**
  * Register ServiceWorker.
  */
-if (navigator.serviceWorker) {
-  navigator.serviceWorker
-    .register('sw.js')
-    .then(() => console.log('SW is registered!'));
+if ('serviceWorker' in navigator) {
+  // Defer service worker registration until after the page has been completely loaded
+  // as seen here: https://developers.google.com/web/fundamentals/primers/service-workers/registration
+  window.addEventListener('load', function() {
+    navigator.serviceWorker
+      .register('sw.js')
+      .then(() => console.log('SW is registered!'));
+
+    // TODO: check if sync events can get the job done
+    // Sync implementation as seen here:
+    // https://developers.google.com/web/updates/2015/12/background-sync
+    navigator.serviceWorker.ready.then(function(swRegistration) {
+      return swRegistration.sync.register('myFirstSync');
+    });
+  });
 }
 
 /**
