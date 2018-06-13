@@ -1,4 +1,4 @@
-const currentCacheVersion = 'mws-restaurant-v39';
+const currentCacheVersion = 'mws-restaurant-v41';
 const imagesToCache = [
   '/img/1.webp',
   '/img/2.webp',
@@ -139,19 +139,3 @@ self.addEventListener('fetch', event => {
     })
   );
 });
-
-// SW Sync
-self.addEventListener('sync', function(event) {
-  if (event.tag == 'myFirstSync') {
-    event.waitUntil(test());
-  }
-});
-
-function test() {
-  return new Promise(function(res, rej) {
-    console.log('works');
-    console.log('sync event fires');
-    let data = { hi: 'tehre' };
-    res(data);
-  });
-}

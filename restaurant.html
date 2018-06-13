@@ -61,12 +61,10 @@
       <form id="review-form" method="post" action="#">
         <div class="review-form-wrapper">
           <label for="review-name">Name:</label>
-          <!-- TODO: add required -->
-          <input type="text" id="review-name" aria-label="Name" aria-required="true">
+          <input type="text" id="review-name" aria-label="Name" aria-required="true" required>
 
-          <!-- TODO: add required and minlength="10" -->
           <label for="review-text">Review:</label>
-          <textarea type="textarea" id="review-text" aria-label="Review text" rows="4" aria-required="true"></textarea>
+          <textarea type="textarea" id="review-text" aria-label="Review text" rows="4" aria-required="true" required></textarea>
 
           <p>Rating:</p>
           <div class="review-form-radio-wrapper">

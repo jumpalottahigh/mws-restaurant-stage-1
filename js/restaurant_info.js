@@ -24,6 +24,44 @@ document.addEventListener('DOMContentLoaded', () => {
         .addEventListener('click', submitReview);
     }
   });
+
+  DBHelper.loadFromIDB('pending-reviews', 'pending-reviews')
+    .then(data => {
+      // If no pending reviews, return
+      if (data.length == 0) {
+        return;
+      }
+
+      // Otherwise, add them as globals
+      if (!self.pendingReviews) {
+        self.pendingReviews = [];
+      }
+
+      data.forEach(rev => {
+        self.pendingReviews.push(rev);
+      });
+
+      // Connection restored, push any pending reviews
+      if (navigator.connection.downlink != 0) {
+        console.log(data);
+        // remove the temp ID key to prevent conflicts with the API DB
+        data.forEach(rev => {
+          console.log('NOrmlalized data:');
+          delete rev.id;
+          console.log(rev);
+          // push data to API
+          DBHelper.postToAPI(rev).then(function() {
+            // Delete the pending reviews in IDB
+            DBHelper.deleteInIDB('pending-reviews', 'pending-reviews');
+          });
+        });
+      }
+
+      return data;
+    })
+    .catch(err => {
+      console.log(`ERROR DB: ${err.status}`);
+    });
 });
 
 /**
@@ -163,6 +201,12 @@ fillReviewsHTML = (reviews = self.reviews) => {
     container.appendChild(noReviews);
     return;
   }
+
+  // Add any pending reviews to the reviews array if offline
+  if (self.pendingReviews) {
+    reviews.push(...self.pendingReviews);
+  }
+
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -253,7 +297,6 @@ getReviewsById = callback => {
  */
 submitReview = e => {
   e.preventDefault();
-  // TODO: add form validation
   let nameNode = document.getElementById('review-name');
   let reviewNode = document.getElementById('review-text');
   let rating = parseInt(

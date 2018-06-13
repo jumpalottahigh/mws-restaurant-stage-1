@@ -8,13 +8,6 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('sw.js')
       .then(() => console.log('SW is registered!'));
-
-    // TODO: check if sync events can get the job done
-    // Sync implementation as seen here:
-    // https://developers.google.com/web/updates/2015/12/background-sync
-    navigator.serviceWorker.ready.then(function(swRegistration) {
-      return swRegistration.sync.register('myFirstSync');
-    });
   });
 }
 
@@ -42,6 +35,13 @@ class DBHelper {
         });
       }
 
+      if (!upgradeDb.objectStoreNames.contains('pending-reviews')) {
+        const store = upgradeDb.createObjectStore('pending-reviews', {
+          keyPath: 'id',
+          autoIncrement: true
+        });
+      }
+
       for (let i = 1; i < 10; i++) {
         if (!upgradeDb.objectStoreNames.contains(`reviews-restaurant-${i}`)) {
           const store = upgradeDb.createObjectStore(`reviews-restaurant-${i}`, {
@@ -50,6 +50,19 @@ class DBHelper {
           });
         }
       }
+    });
+  }
+
+  /**
+   * Delete store in IDB.
+   */
+  static deleteInIDB(transactionName, storeName) {
+    return DBHelper.openIDB().then(db => {
+      const tx = db
+        .transaction(transactionName, 'readwrite')
+        .objectStore(storeName)
+        .clear();
+      return tx.complete;
     });
   }
 
@@ -375,7 +388,16 @@ class DBHelper {
         return data;
       })
       .catch(err => {
+        // Save a pending review in IDB
+        DBHelper.saveReviewToIDB(review, `pending-reviews`, `pending-reviews`);
+        // Add it as a global too
+        if (!self.pendingReviews) {
+          self.pendingReviews = [];
+        }
+        self.pendingReviews.push(review);
+
         console.log(`Error: ${err}`);
+        return review;
       });
   }
 }
