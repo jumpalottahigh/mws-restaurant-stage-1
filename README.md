@@ -4,7 +4,7 @@
 
 This repo aims to satisfy the criteria for solutions for stage one, two and three of the Udacity Mobile Web Specialist course project.
 
-A fresh preview of the app is available at: [https://ecstatic-ptolemy-c60052.netlify.com/](https://ecstatic-ptolemy-c60052.netlify.com/)
+A fresh preview of the app is available at: [https://udacity-mws-georgi.netlify.com/](https://udacity-mws-georgi.netlify.com/)
 
 If you want to run it locally clone the repo and install the dependencies:
 
